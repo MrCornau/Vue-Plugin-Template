@@ -13,6 +13,36 @@ let color_background = { r: 0.13725, g: 0.14510, b: 0.14902 }
 let transparent = {visible:false, type : "SOLID", color: fontcolor_primary}
 
 
+let getMarkedPartsOfSent = (start,end,sent) =>{
+	let reStart = new RegExp(start,'gi');
+	let reEnd = new RegExp(end,'gi');
+	let startMark = new Array();
+	let endMark = new Array();
+	while (reStart.exec(sent)){
+		startMark.push(reStart.lastIndex);
+	}
+	while (reEnd.exec(sent)){
+		endMark.push(reEnd.lastIndex);
+	}
+	// console.log(startMark,endMark)
+	let NewStartArray =  new Array();
+	startMark.map((currElement, index) => {
+		let subtract = ((index+1)*start.length)+(index*end.length)
+		NewStartArray.push(currElement - subtract)
+	})
+	// console.log(NewStartArray)
+	let NewEndArray =  new Array();
+	endMark.map((currElement, index) => {
+		let subtract = ((index+1)*start.length)+((index+1)*end.length)
+		NewEndArray.push(currElement - subtract)
+	})
+	let cleanedSent = sent.replaceAll(start, "").replaceAll(end, "")
+	let sentObject = {"sent":cleanedSent,"Start":NewStartArray,"End":NewEndArray}
+	return sentObject
+}
+
+
+
 
 figma.ui.onmessage = async (message) => {
 	// Roboto Regular is the font that objects will be created with by default in
@@ -28,41 +58,7 @@ figma.ui.onmessage = async (message) => {
 	let link = message.data[0].link
 
 
-
-	let start = '-----> '
-	let end = ' !!! '
-	console.log(start.length)
-	let reStart = new RegExp(start,'gi');
-	let reEnd = new RegExp(end,'gi');
-	
-	let startMark = new Array();//this is the results you want
-	let endMark = new Array();
-	while (reStart.exec(sent)){
-		startMark.push(reStart.lastIndex);
-	}
-	while (reEnd.exec(sent)){
-		endMark.push(reEnd.lastIndex);
-	}
-
-
-	console.log(startMark,endMark)
-	//console.log(autor,'Autor')
-	let newArray =  new Array();
-	startMark.map((currElement, index) => {
-		let subtract = ((index+1)*start.length)+(index*end.length)
-		newArray.push(currElement - subtract)
-	})
-	console.log(newArray)
-
-
-	let newArray2 =  new Array();
-	endMark.map((currElement, index) => {
-		let subtract = ((index+1)*start.length)+((index+1)*end.length)
-		newArray2.push(currElement - subtract)
-	})
-	console.log(newArray2)
-
-
+	let markedSent = getMarkedPartsOfSent('-----> ',' !!! ',sent)
 
     let boldFont = {family: "IBM Plex Serif", style: "Bold"};
     await figma.loadFontAsync(boldFont);
@@ -155,7 +151,13 @@ figma.ui.onmessage = async (message) => {
 	cardFrame.appendChild(description_T);
 	description_T.fontName = italicFont;
 	description_T.fills = [{type : "SOLID", color: fontcolor_primary}]
-    description_T.characters = sent;
+    description_T.characters = markedSent.sent;
+
+	markedSent.Start.map((currElement, index) => {
+		description_T.setRangeFills(markedSent.Start[index],markedSent.End[index],[{type : "SOLID", color: color_accent}])
+		description_T.setRangeFontName(markedSent.Start[index],markedSent.End[index],boldFont)
+	})
+
 	description_T.setRangeFills(0,5,[{type : "SOLID", color: color_accent}])
     description_T.textAutoResize = "WIDTH_AND_HEIGHT";
     description_T.layoutAlign = "STRETCH";
