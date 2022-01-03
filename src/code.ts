@@ -1,5 +1,8 @@
 import { dispatch, handleEvent } from './codeMessageHandler';
-const arrow = require("./Arrow.svg")
+
+const arrow = `<svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.47534 7.28992L11.3305 10.145L8.67225 12.8033" stroke="#DDE58E"/>
+<path d="M1 0.810425V10.0465H10.6343" stroke="#DDE58E"/></svg>`
 
 figma.showUI(__html__);
 
@@ -14,9 +17,7 @@ let transparent = {visible:false, type : "SOLID", color: fontcolor_primary}
 figma.ui.onmessage = async (message) => {
 	// Roboto Regular is the font that objects will be created with by default in
 	// Figma. We need to wait for fonts to load before creating text using them.
-	
-
-	console.log(message)
+	///console.log(message)
 
 	let data = message.data
 	let autor = message.data[0].autor
@@ -24,7 +25,19 @@ figma.ui.onmessage = async (message) => {
 	let sent = message.data[0].MarkedSent
 	let link = message.data[0].link
 
-	console.log(autor,'Autor')
+
+
+	// var needle = '---->'
+	// var re = new RegExp(needle,'gi');
+	// var haystack = sent;
+	
+	// var results = new Array();//this is the results you want
+	// while (re.exec(haystack)){
+	//   results.push(re.lastIndex);
+	// }
+
+	// console.log(results)
+	//console.log(autor,'Autor')
 	await figma.loadFontAsync({ family: "IBM Plex Serif", style: "Regular" })
 
     let boldFont = {family: "IBM Plex Serif", style: "Bold"};
@@ -119,25 +132,35 @@ figma.ui.onmessage = async (message) => {
 	description_T.fontName = italicFont;
 	description_T.fills = [{type : "SOLID", color: fontcolor_primary}]
     description_T.characters = sent;
+	description_T.setRangeFills(0,5,[{type : "SOLID", color: color_accent}])
     description_T.textAutoResize = "WIDTH_AND_HEIGHT";
     description_T.layoutAlign = "STRETCH";
 
+	console.log(description_T.fills)
 	// link
+
+
+
+
+
 	// Tag
 	let link_F = figma.createFrame();
 	cardFrame.appendChild(link_F);
-	link_F.layoutMode = "VERTICAL";
-	link_F.itemSpacing = 1;
+	link_F.layoutMode = "HORIZONTAL";
+	link_F.itemSpacing = 4;
 	link_F.counterAxisSizingMode = "AUTO";
 	// @ts-ignore
 	link_F.primaryAxisSizingMode = "AUTO";
 	// @ts-ignore
 	link_F.fills =  [transparent]
 
+	const Arrow = figma.createNodeFromSvg(arrow);
+	link_F.appendChild(Arrow);
+
 	let Link_T = figma.createText();
 	link_F.appendChild(Link_T);
     Link_T.fontName = italicFont;
-	Link_T.fills = [{type : "SOLID", color: fontcolor_primary}]
+	Link_T.fills = [{type : "SOLID", color: color_accent}]
     Link_T.characters = 'visit comment';
     Link_T.textAutoResize = "WIDTH_AND_HEIGHT";
     Link_T.layoutAlign = "STRETCH";

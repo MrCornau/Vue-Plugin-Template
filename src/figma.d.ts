@@ -650,6 +650,11 @@ declare global {
 	}
 
 	interface FrameNode extends DefaultFrameMixin {
+		paddingBottom: number;
+		paddingTop: number;
+		paddingRight: number;
+		paddingLeft: number;
+		primaryAxisSizingMode: string;
 		readonly type: 'FRAME';
 		clone(): FrameNode;
 	}
