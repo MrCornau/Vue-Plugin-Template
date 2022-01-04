@@ -1,15 +1,86 @@
 <template lang="pug">
-//- div
-//- 	button.button.button--primary(@click='createNode') Create a TEST node
-//- 	p.type.type--pos-small-normal {{message}}
-//- div
 
 <div>
-//- <input v-model="message" placeholder="edit me">
-//- <p>Message is: {{ message }}</p>
-<button class='button button--primary' @click='createNode(message)'>Label</button> 
+  <div v-if="!loading">
+  <div id="app"   v-cloak @drop.prevent @dragover.prevent>
+  <div class="dropfield" @drop="onFileDopped">
+  </div>
+  <button class="btn btn-info" @click="onPickFile">Upload profile picture</button>
+  <input type="file" @change="onFilePicked" ref="fileInput" accept="application/JSON"  style="display: none">
+  </div>
+  </div>
+  <div v-if="loading">
+  <Spinner/>
+<div>loaded {{this.done}}/{{this.count}} posts</div>
+<div class="container">
+  <div class="loading-bar">
+    <div class="percentage" :style="{'width': percentage + '%'}">
+    </div>
+  </div>
 </div>
+
+  </div>
+
+  
+</div>
+
+
 </template>
+
+<style lang="scss">
+@import "./figma-ui/figma-plugin-ds";
+
+.dropfield {
+  height: 200px;
+  background-color: saddlebrown;
+}
+
+.loading-bar {
+  position: relative;
+  width: 200px;
+  height: 10px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba($color: #000, $alpha: 0.4), 0 -1px 1px #fff,
+    0 1px 0 #fff;
+  .percentage {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    left: 1px;
+    display: block;
+    height: 100%;
+    width: 50%;
+    background-color: #a5df41;
+    background-image: linear-gradient(
+      135deg,
+      rgba($color: #fff, $alpha: 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba($color: #fff, $alpha: 0.15) 50%,
+      rgba($color: #fff, $alpha: 0.15) 75%,
+      transparent 75%,
+      transparent
+    );
+    animation: animate-stripes 3s linear infinite;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 0;
+  }
+}
+</style>
+
+//
+<button
+  class="button button--primary"
+  @click="createNode(message)"
+>Label</button>
 
 <script>
 import { dispatch, handleEvent } from "./uiMessageHandler";
@@ -17,109 +88,18 @@ import { dispatch, handleEvent } from "./uiMessageHandler";
 import "./figma-ui/js/selectMenu";
 import "./figma-ui/js/iconInput";
 import "./figma-ui/js/disclosure";
+import Spinner from "./LoadingSpinner.vue";
 
 export default {
+  components: {
+    Spinner,
+  },
   data() {
     return {
-      message: [
-        {
-          autor: "ntoporcov",
-          date: "2019-01-18 06:21:37",
-          content:
-            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/ErgoMechKeyboards/comments/q067kc/my_little_colemak_dactyl_manuform_and_custom/",
-          origin: "Reddit",
-          suborigin: "nikon",
-          result: true,
-          Selector: "i created",
-          selectorShort: "create",
-          MarkedSent:
-            "-----> i !!!  -----> created !!! a web app for photographers who use google drive to send photos to clients but wish they had a better -----> looking !!! page to send to clients.",
-          sortedWord: "None",
-          Identifyer: null,
-          identifyer: 1248,
-          year: "2019",
-          tag: "",
-          rating: 3,
-          heading: "A Web App for Photographs",
-          description: "Great Webapp, for Photographs",
-          id: 0,
-          media: "https://i.redd.it/0df5rp1suh981.jpg",
-        },
-        {
-          autor: "Manuel Neuer",
-          date: "2019-01-18 06:21:37",
-          content:
-            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/photography/comments/rvg4j2/a_friendly_reminder/",
-          origin: "Reddit",
-          suborigin: "nikon",
-          result: true,
-          Selector: "i created",
-          selectorShort: "create",
-          MarkedSent:
-            "-----> Wenn !!! es zwei zu eins steht, dann ist ein zwei zu -----> null !!! nicht mehr möglich.",
-          sortedWord: "None",
-          Identifyer: null,
-          identifyer: 1248,
-          year: "2019",
-          tag: "running",
-          rating: 4,
-          heading: "A Web App for Photographs",
-          description: "Great Webapp, for Photographs",
-          id: 0,
-          media: "https://i.redd.it/0df5rp1suh981.jpg",
-        },
-        {
-          autor: "Manuel Alter",
-          date: "2019-01-18 06:21:37",
-          content:
-            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/photography/comments/rvg4j2/a_friendly_reminder/",
-          origin: "Reddit",
-          suborigin: "nikon",
-          result: true,
-          Selector: "i created",
-          selectorShort: "create",
-          MarkedSent:
-            "-----> Wenn !!! es zwei zu eins steht, dann ist ein zwei zu -----> null !!! nicht mehr möglich.",
-          sortedWord: "None",
-          Identifyer: null,
-          identifyer: 1248,
-          year: "2019",
-          tag: "running",
-          rating: 4,
-          heading: "A Web App for Photographs",
-          description: "Great Webapp, for Photographs",
-          id: 0,
-          media: "https://i.redd.it/0df5rp1suh981.jpg",
-        },
-
-        {
-          autor: "Manuel Neuer",
-          date: "2019-01-18 06:21:37",
-          content:
-            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/robotics/comments/n21giz/a_closer_look_at_acorn_our_open_source_farming/",
-          origin: "Reddit",
-          suborigin: "nikon",
-          result: true,
-          Selector: "i created",
-          selectorShort: "create",
-          MarkedSent:
-            "-----> Wenn !!! es zwei zu eins steht, dann ist ein zwei zu -----> null !!! nicht mehr möglich.",
-          sortedWord: "None",
-          Identifyer: null,
-          identifyer: 1248,
-          year: "2019",
-          tag: "communication",
-          rating: 2,
-          heading: "A Web App for Photographs",
-          description: "Great Webapp, for Photographs",
-          id: 0,
-          media: "https://i.redd.it/0df5rp1suh981.jpg",
-        },
-      ],
+      loading: false,
+      percentage: 0,
+      count: 0,
+      done: 0,
     };
   },
   mounted() {
@@ -135,10 +115,34 @@ export default {
   },
 
   methods: {
+    onFileDopped(event) {
+      var reader = new FileReader();
+      reader.onload = this.onReaderLoad;
+      reader.readAsText(event.dataTransfer.files[0]);
+      // this.onFilePicked(event.dataTransfer.files);
+    },
+
+    onPickFile() {
+      this.$refs.fileInput.click();
+    },
+
+    onFilePicked(event) {
+      var reader = new FileReader();
+      reader.onload = this.onReaderLoad;
+      reader.readAsText(event.target.files.FIle[0]);
+    },
+    onReaderLoad(event) {
+      var obj = JSON.parse(event.target.result);
+      console.log(obj);
+      this.createNode(obj);
+    },
+
     async createNode(message) {
       let Cards = [];
-
-      for (let comment of message) {
+      this.loading = true;
+      this.count = message.length;
+      let step = 100 / message.length;
+      for await (let comment of message) {
         let imagelink = await this.fetchMetaTags(comment.link);
         console.log(imagelink);
         let metaTags = "None";
@@ -151,12 +155,13 @@ export default {
             height: imageData.img.naturalHeight,
           };
         }
-
-        console.log(metaTags, "test");
         comment["imagehash"] = metaTags;
         Cards.push(comment);
+        this.percentage += step;
+        this.done += 1;
       }
 
+      this.loading = false;
       dispatch("createNode", Cards);
     },
 
@@ -174,7 +179,6 @@ export default {
           })
           .then(async (html) => {
             let metaTags = {};
-
             // This is the HTML from our response as a text string
             let head = document.createElement("div");
             let headMatch = html.match(/<head>([\s\S]*?)<\/head>/);
@@ -185,12 +189,10 @@ export default {
             let image = head.querySelector(
               'meta[property="og:image"],meta[name="twitter:image"]'
             );
-
             if (!image) {
               resolve("No image found");
               return;
             }
-
             resolve(image.getAttribute("content"));
           })
           .catch(function (err) {
@@ -241,7 +243,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import "./figma-ui/figma-plugin-ds";
-</style>

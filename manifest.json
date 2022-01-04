@@ -1,5 +1,5 @@
 {
-  "name": "ImportJson",
+  "name": "Lead Finder",
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/ui.html",
