@@ -230,7 +230,7 @@ figma.ui.onmessage = async (message) => {
 	// Figma. We need to wait for fonts to load before creating text using them.
 	console.log(message)
 
-
+	let data = message.data
 	
 	let metaTags = message.data[0].imagehash
 	let autor = message.data[0].autor
@@ -253,7 +253,7 @@ figma.ui.onmessage = async (message) => {
 
 	let CommentGrid = figma.createFrame()
 
-	CommentGrid.layoutMode = "HORIZONTAL";
+	CommentGrid.layoutMode = "VERTICAL";
 	// @ts-ignore
     CommentGrid.itemSpacing = 36;
 	// @ts-ignore
@@ -262,8 +262,8 @@ figma.ui.onmessage = async (message) => {
 		// @ts-ignore
     CommentGrid.fills = [transparent]
 
-	for (let i = 0; i < 5; i++) {
-		let Frame = await createFrame(metaTags,autor,date,sent,link,heading,description,rating,tag,italicFont,imageWidth,cardPadding,boldFont)
+	for (let comment of data){
+		let Frame = await createFrame(comment.imagehash,comment.autor,comment.date,comment.MarkedSent,comment.link,comment.heading,comment.description,comment.rating,comment.tag,italicFont,imageWidth,cardPadding,boldFont)
 		CommentGrid.appendChild(Frame)
 	}
 

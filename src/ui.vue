@@ -27,7 +27,7 @@ export default {
           date: "2019-01-18 06:21:37",
           content:
             "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/Nikon/comments/ah7lvu/i_created_a_web_app_for_photographers_who_use/",
+          link: "https://www.reddit.com/r/ErgoMechKeyboards/comments/q067kc/my_little_colemak_dactyl_manuform_and_custom/",
           origin: "Reddit",
           suborigin: "nikon",
           result: true,
@@ -35,6 +35,30 @@ export default {
           selectorShort: "create",
           MarkedSent:
             "-----> i !!!  -----> created !!! a web app for photographers who use google drive to send photos to clients but wish they had a better -----> looking !!! page to send to clients.",
+          sortedWord: "None",
+          Identifyer: null,
+          identifyer: 1248,
+          year: "2019",
+          tag: "communication",
+          rating: 3,
+          heading: "A Web App for Photographs",
+          description: "Great Webapp, for Photographs",
+          id: 0,
+          media: "https://i.redd.it/0df5rp1suh981.jpg",
+        },
+        {
+          autor: "Manuel Neuer",
+          date: "2019-01-18 06:21:37",
+          content:
+            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
+          link: "https://www.reddit.com/r/GoalKeepers/comments/pziyi0/is_manuel_neuer_actually_playing_with_urg_20_zoom/",
+          origin: "Reddit",
+          suborigin: "nikon",
+          result: true,
+          Selector: "i created",
+          selectorShort: "create",
+          MarkedSent:
+            "-----> Wenn !!! es zwei zu eins steht, dann ist ein zwei zu -----> null !!! nicht mehr möglich.",
           sortedWord: "None",
           Identifyer: null,
           identifyer: 1248,
@@ -63,11 +87,8 @@ export default {
 
   methods: {
     async createNode(message) {
-      let imagelink = await this.fetchMetaTags(
-        "https://www.reddit.com/r/ErgoMechKeyboards/comments/q067kc/my_little_colemak_dactyl_manuform_and_custom/"
-      );
+      let imagelink = await this.fetchMetaTags(message[0].link);
       let imageData = await this.getEncodedImageFromURL(imagelink);
-
       let metaTags = {
         data: imageData.data,
         url: imageData.img.src,
@@ -76,6 +97,18 @@ export default {
       };
       console.log(metaTags, "test");
       message[0]["imagehash"] = metaTags;
+
+      imagelink = await this.fetchMetaTags(message[1].link);
+      imageData = await this.getEncodedImageFromURL(imagelink);
+      metaTags = {
+        data: imageData.data,
+        url: imageData.img.src,
+        width: imageData.img.naturalWidth,
+        height: imageData.img.naturalHeight,
+      };
+      console.log(metaTags, "test");
+      message[1]["imagehash"] = metaTags;
+
       dispatch("createNode", message);
     },
 
