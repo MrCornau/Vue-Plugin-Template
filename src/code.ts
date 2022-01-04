@@ -133,14 +133,13 @@ let createFrame = async (metaTags,autor,date,sent,link,heading,description,ratin
 
 
 	// Images
-
-	let imageHash = figma.createImage(metaTags.data).hash
-	const rect = figma.createRectangle()
-	rect.resize(imageWidth, imageWidth / (metaTags.width / metaTags.height));
-	rect.fills = [ { type: "IMAGE", scaleMode: "FIT", imageHash } ]
-	comment.appendChild(rect);
-	
-	
+	if (metaTags!='None'){
+		let imageHash = figma.createImage(metaTags.data).hash
+		const rect = figma.createRectangle()
+		rect.resize(imageWidth, imageWidth / (metaTags.width / metaTags.height));
+		rect.fills = [ { type: "IMAGE", scaleMode: "FIT", imageHash } ]
+		comment.appendChild(rect);
+	}
 
 
 	let title = figma.createFrame();

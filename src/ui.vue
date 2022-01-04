@@ -51,7 +51,7 @@ export default {
           date: "2019-01-18 06:21:37",
           content:
             "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
-          link: "https://www.reddit.com/r/GoalKeepers/comments/pziyi0/is_manuel_neuer_actually_playing_with_urg_20_zoom/",
+          link: "https://www.reddit.com/r/photography/comments/rvg4j2/a_friendly_reminder/",
           origin: "Reddit",
           suborigin: "nikon",
           result: true,
@@ -64,7 +64,32 @@ export default {
           identifyer: 1248,
           year: "2019",
           tag: "communication",
-          rating: 3,
+          rating: 4,
+          heading: "A Web App for Photographs",
+          description: "Great Webapp, for Photographs",
+          id: 0,
+          media: "https://i.redd.it/0df5rp1suh981.jpg",
+        },
+
+        {
+          autor: "Manuel Neuer",
+          date: "2019-01-18 06:21:37",
+          content:
+            "I created a web app for photographers who use Google Drive to send photos to clients but wish they had a better looking page to send to clients.",
+          link: "https://www.reddit.com/r/robotics/comments/n21giz/a_closer_look_at_acorn_our_open_source_farming/",
+          origin: "Reddit",
+          suborigin: "nikon",
+          result: true,
+          Selector: "i created",
+          selectorShort: "create",
+          MarkedSent:
+            "-----> Wenn !!! es zwei zu eins steht, dann ist ein zwei zu -----> null !!! nicht mehr möglich.",
+          sortedWord: "None",
+          Identifyer: null,
+          identifyer: 1248,
+          year: "2019",
+          tag: "communication",
+          rating: 2,
           heading: "A Web App for Photographs",
           description: "Great Webapp, for Photographs",
           id: 0,
@@ -91,13 +116,18 @@ export default {
 
       for (let comment of message) {
         let imagelink = await this.fetchMetaTags(comment.link);
-        let imageData = await this.getEncodedImageFromURL(imagelink);
-        let metaTags = {
-          data: imageData.data,
-          url: imageData.img.src,
-          width: imageData.img.naturalWidth,
-          height: imageData.img.naturalHeight,
-        };
+        console.log(imagelink);
+        let metaTags = "None";
+        if (imagelink != "No image found") {
+          let imageData = await this.getEncodedImageFromURL(imagelink);
+          metaTags = {
+            data: imageData.data,
+            url: imageData.img.src,
+            width: imageData.img.naturalWidth,
+            height: imageData.img.naturalHeight,
+          };
+        }
+
         console.log(metaTags, "test");
         comment["imagehash"] = metaTags;
         Cards.push(comment);
@@ -131,6 +161,11 @@ export default {
             let image = head.querySelector(
               'meta[property="og:image"],meta[name="twitter:image"]'
             );
+
+            if (!image) {
+              resolve("No image found");
+              return;
+            }
 
             resolve(image.getAttribute("content"));
           })
