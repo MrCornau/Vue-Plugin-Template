@@ -87,29 +87,23 @@ export default {
 
   methods: {
     async createNode(message) {
-      let imagelink = await this.fetchMetaTags(message[0].link);
-      let imageData = await this.getEncodedImageFromURL(imagelink);
-      let metaTags = {
-        data: imageData.data,
-        url: imageData.img.src,
-        width: imageData.img.naturalWidth,
-        height: imageData.img.naturalHeight,
-      };
-      console.log(metaTags, "test");
-      message[0]["imagehash"] = metaTags;
+      let Cards = [];
 
-      imagelink = await this.fetchMetaTags(message[1].link);
-      imageData = await this.getEncodedImageFromURL(imagelink);
-      metaTags = {
-        data: imageData.data,
-        url: imageData.img.src,
-        width: imageData.img.naturalWidth,
-        height: imageData.img.naturalHeight,
-      };
-      console.log(metaTags, "test");
-      message[1]["imagehash"] = metaTags;
+      for (let comment of message) {
+        let imagelink = await this.fetchMetaTags(comment.link);
+        let imageData = await this.getEncodedImageFromURL(imagelink);
+        let metaTags = {
+          data: imageData.data,
+          url: imageData.img.src,
+          width: imageData.img.naturalWidth,
+          height: imageData.img.naturalHeight,
+        };
+        console.log(metaTags, "test");
+        comment["imagehash"] = metaTags;
+        Cards.push(comment);
+      }
 
-      dispatch("createNode", message);
+      dispatch("createNode", Cards);
     },
 
     async fetchMetaTags(url) {
