@@ -41,11 +41,12 @@ let createFrame = async (metaTags,autor,date,sent,link,heading,description,ratin
 	let description_F = figma.createFrame();
 	cardFrame.appendChild(description_F);
 	description_F.paddingLeft = description_F.paddingRight = cardPadding
-
+	description_F.itemSpacing = cardPadding/2;
 	description_F.layoutMode = "VERTICAL";
 	description_F.primaryAxisSizingMode = "AUTO";
     description_F.counterAxisSizingMode = "AUTO";
 	description_F.layoutAlign= "STRETCH";
+
 	// @ts-ignore
 	description_F.fills = [transparent]
 
@@ -64,16 +65,26 @@ let createFrame = async (metaTags,autor,date,sent,link,heading,description,ratin
 	tag_F.appendChild(tag_T);
     tag_T.fontName = italicFont;
 	tag_T.fills = [{type : "SOLID", color: color_accent}]
-    tag_T.characters = '#'+tag;
+	if(tag.length === 0){
+		tag_T.characters = '#placeholder';
+		tag_F.visible = false;
+	}else(tag_T.characters = '#'+tag)
     tag_T.textAutoResize = "WIDTH_AND_HEIGHT";
     tag_T.layoutAlign = "STRETCH";
-	
+
+	console.log(tag.length)
+
+
 	//Heading
 	let heading_T = figma.createText();
 	description_F.appendChild(heading_T);
     heading_T.fontName = boldFont;
 	heading_T.fills = [{type : "SOLID", color: fontcolor_primary}]
-    heading_T.characters = heading;
+	if(heading.length === 0){
+		tag_T.characters = 'Heading';
+		heading_T.visible = false;
+	}else(heading_T.characters = heading)
+
     heading_T.textAutoResize = "HEIGHT";
     heading_T.layoutAlign = "STRETCH";
 
@@ -104,7 +115,12 @@ let createFrame = async (metaTags,autor,date,sent,link,heading,description,ratin
 	description_F.appendChild(description_T);
 	description_T.fontName = italicFont;
 	description_T.fills = [{type : "SOLID", color: fontcolor_primary}]
-    description_T.characters = description;
+	if(description.length === 0){
+		description_T.characters = 'Description';
+		description_T.visible = false;
+	}else(description_T.characters = description)
+
+
     description_T.textAutoResize = "WIDTH_AND_HEIGHT";
     description_T.layoutAlign = "STRETCH";
 
@@ -124,6 +140,7 @@ let createFrame = async (metaTags,autor,date,sent,link,heading,description,ratin
 	let comment = figma.createFrame();
 	cardFrame.appendChild(comment);
 	comment.paddingLeft = comment.paddingRight = cardPadding
+	comment.itemSpacing = cardPadding/2;
 	comment.layoutMode = "VERTICAL";
 	comment.primaryAxisSizingMode = "AUTO";
     comment.counterAxisSizingMode = "FIXED";

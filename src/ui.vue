@@ -39,7 +39,7 @@ export default {
           Identifyer: null,
           identifyer: 1248,
           year: "2019",
-          tag: "communication",
+          tag: "",
           rating: 3,
           heading: "A Web App for Photographs",
           description: "Great Webapp, for Photographs",
