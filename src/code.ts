@@ -13,33 +13,10 @@ let transparent = {visible:false, type : "SOLID", color: fontcolor_primary}
 let color_divider = {r:0.20000, g: 0.21569, b:0.22745}
 
 
-figma.ui.onmessage = async (message) => {
-	// Roboto Regular is the font that objects will be created with by default in
-	// Figma. We need to wait for fonts to load before creating text using them.
-	console.log(message)
+let createFrame = async (metaTags,autor,date,sent,link,heading,description,rating,tag, italicFont,imageWidth,cardPadding,boldFont) => {
 
-
-	
-	let metaTags = message.data[0].imagehash
-	let autor = message.data[0].autor
-	let date = message.data[0].date
-	let sent = message.data[0].MarkedSent
-	let link = message.data[0].link
-	let heading = message.data[0].heading
-	let description = message.data[0].description
-	let rating = message.data[0].rating
-	let tag = message.data[0].tag
-	let media = message.data[0].media
 
 	let markedSent = helperfunctions.getMarkedPartsOfSent('-----> ',' !!!',sent)
-	let boldFont = {family: "IBM Plex Serif", style: "Bold"};
-	let italicFont = {family: "IBM Plex Sans", style: "Italic"};
-
-	await figma.loadFontAsync(boldFont);
-	await figma.loadFontAsync(italicFont);
-
-    const imageWidth = 320;
-    const cardPadding = 16;
     // Create Metacard Frame
     let cardFrame = figma.createFrame();
 	// @ts-ignore
@@ -242,6 +219,56 @@ figma.ui.onmessage = async (message) => {
 		type: "URL",
 		value: link
 	  };
+
+	return cardFrame
+
+}
+
+
+figma.ui.onmessage = async (message) => {
+	// Roboto Regular is the font that objects will be created with by default in
+	// Figma. We need to wait for fonts to load before creating text using them.
+	console.log(message)
+
+
+	
+	let metaTags = message.data[0].imagehash
+	let autor = message.data[0].autor
+	let date = message.data[0].date
+	let sent = message.data[0].MarkedSent
+	let link = message.data[0].link
+	let heading = message.data[0].heading
+	let description = message.data[0].description
+	let rating = message.data[0].rating
+	let tag = message.data[0].tag
+
+	let boldFont = {family: "IBM Plex Serif", style: "Bold"};
+	let italicFont = {family: "IBM Plex Sans", style: "Italic"};
+
+	await figma.loadFontAsync(boldFont);
+	await figma.loadFontAsync(italicFont);
+
+    const imageWidth = 320;
+    const cardPadding = 16;
+
+	let CommentGrid = figma.createFrame()
+
+	CommentGrid.layoutMode = "HORIZONTAL";
+	// @ts-ignore
+    CommentGrid.itemSpacing = 36;
+	// @ts-ignore
+    CommentGrid.primaryAxisSizingMode = "AUTO";
+    CommentGrid.counterAxisSizingMode = "AUTO";
+		// @ts-ignore
+    CommentGrid.fills = [transparent]
+
+	for (let i = 0; i < 5; i++) {
+		let Frame = await createFrame(metaTags,autor,date,sent,link,heading,description,rating,tag,italicFont,imageWidth,cardPadding,boldFont)
+		CommentGrid.appendChild(Frame)
+	}
+
+	
+
   
 	figma.closePlugin()
   }
