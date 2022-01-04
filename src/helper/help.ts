@@ -30,6 +30,8 @@ export function getMarkedPartsOfSent (start,end,sent){
 
 
 
+
+
 let arrow = `<svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path d="M8.47534 7.28992L11.3305 10.145L8.67225 12.8033" stroke="#DDE58E"/>
 	<path d="M1 0.810425V10.0465H10.6343" stroke="#DDE58E"/></svg>`;
