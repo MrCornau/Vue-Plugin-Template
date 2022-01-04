@@ -76,10 +76,9 @@ export default {
       };
       console.log(metaTags, "test");
       message[0]["imagehash"] = metaTags;
-      // console.log(data);
-      // let numbers = message.split(",").map((x) => +x);
       dispatch("createNode", message);
     },
+
     async fetchMetaTags(url) {
       return new Promise(function (resolve, reject) {
         let fetchUrl = `https://cors-anywhere.herokuapp.com/${url.replace(
@@ -101,21 +100,6 @@ export default {
             let headHTML = headMatch !== null ? headMatch[1] : html;
             headHTML.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm, "");
             head.innerHTML = headHTML;
-
-            //Get the title
-            let title = head.querySelector(
-              'meta[property="og:title"],meta[name="twitter:title"]'
-            );
-            if (!title) {
-              reject("No meta data found");
-              return;
-            }
-            metaTags.title = title.getAttribute("content");
-
-            // Get the description
-            let description = head.querySelector('meta[name="description"]');
-            metaTags.description = description.getAttribute("content");
-
             // get image3
             let image = head.querySelector(
               'meta[property="og:image"],meta[name="twitter:image"]'
@@ -138,7 +122,6 @@ export default {
 
         // Some websites will allow loading of images into a canvas if set to Anonymous
         img.crossOrigin = "Anonymous";
-
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
