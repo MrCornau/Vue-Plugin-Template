@@ -3,7 +3,7 @@ import { dispatch, handleEvent } from './codeMessageHandler';
 import * as helperfunctions from "./helper/help"
 import * as createFrame from "./helper/createFrame"
 
-figma.showUI(__html__);
+figma.showUI(__html__,{width: 520, height: 230});
 
 
 
@@ -11,9 +11,13 @@ figma.showUI(__html__);
 figma.ui.onmessage = async (message) => {
 	// Roboto Regular is the font that objects will be created with by default in
 	// Figma. We need to wait for fonts to load before creating text using them.
-	console.log(message)
+	// console.log(message)
+	if(message.action=="resize"){
+		figma.ui.resize(520, 366)
+	}
 
-	
+	if(message.action=="createNode"){
+		
 	let data = message.data
 	
 	let style = {
@@ -97,21 +101,13 @@ figma.ui.onmessage = async (message) => {
 			Row_F.appendChild(Frame)
 		}
 		CommentGrid.appendChild(Row_F)
-
+		
 	}
-
-	// for (let comment of data){
-	// 	let content = {
-	// 		"metaTag": comment.imagehash,"autor":comment.autor,"date":comment.date,"sent":comment.MarkedSent,"link":comment.link,"heading":comment.heading,"description":comment.description,"rating":comment.rating,"tag":comment.tag
-	// 	} 
-	// 	let Frame = await createFrame.createFrame(content,style)
-	// 	CommentGrid.appendChild(Frame)
-	// }
-
-	
-
-  
+	let viewport = []
+	viewport.push(CommentGrid)
+	figma.viewport.scrollAndZoomIntoView(viewport);
 	figma.closePlugin()
+}
   }
 
 

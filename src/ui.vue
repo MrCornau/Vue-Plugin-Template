@@ -1,64 +1,216 @@
 <template lang="pug">
 
-<div>
-  <div v-if="!loading">
-  <div id="app"   v-cloak @drop.prevent @dragover.prevent>
-  <div class="dropfield" @drop="onFileDopped">
+<div class="window">
+  <div class="spacing">
+  <p class="Text_color">To fetch images request temporary access to the <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" >corse demo server</a></p>
   </div>
-  <button class="btn btn-info" @click="onPickFile">Upload profile picture</button>
-  <input type="file" @change="onFilePicked" ref="fileInput" accept="application/JSON"  style="display: none">
-  </div>
-  </div>
-  <div v-if="loading">
-  <Spinner/>
-<div>loaded {{this.done}}/{{this.count}} posts</div>
-<div class="container">
-  <div class="loading-bar">
-    <div class="percentage" :style="{'width': percentage + '%'}">
+  <div class="dropfield" v-cloak @drop.prevent @dragover.prevent>
+    <div class="dropcontainer" @drop="onFileDopped">
+      <div class="info">
+        <h1 class="Text_color">Drop your file or <span class="pointer signal_color" @click="onPickFile"> browse</span></h1>
+        <input type="file" @change="onFilePicked" ref="fileInput" accept="application/JSON"  style="display: none">
+        <p class="secondText_color">Search for LeadUser.json</p>
+      </div>
+      <FileIcon/>
+    </div>
+
+  <div v-if="loading" class="loadingcontainer">
+    <h2 class="Text_color">Loading great Posts...</h2>
+    <div class="progress">
+      <div class="progress-description">
+      <p class="signal_color">{{this.percentage}}%&nbsp</p><p class="secondText_color">· {{this.done}}/{{this.count}} Posts</p>
+      </div>
+      <div class="progressbar-container">
+        <div class="loading-bar">
+          <div class="percentage" :style="{'width': percentage + '%'}"></div>
+        </div>
+      </div>
+      
     </div>
   </div>
-</div>
-
   </div>
+
+
+  
 
   
 </div>
-
-
 </template>
+
+// <Spinner/>
+//   <div>loaded {{this.done}}/{{this.count}} posts</div>
+//   <div class="container">
+//     <div class="loading-bar">
+//       <div class="percentage" :style="{'width': percentage + '%'}">
+//       </div>
+//     </div>
+  
+
+//   </div>
 
 <style lang="scss">
 @import "./figma-ui/figma-plugin-ds";
 
-.dropfield {
-  height: 200px;
-  background-color: saddlebrown;
+body{
+  background-color: #232425;
 }
+
+.Text_color {
+  color: #d3d7d8;
+}
+.signal_color {
+  color: #edf67d;
+}
+
+.secondText_color {
+  color: #b0cdcf;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+h1 {
+  font-family: IBM Plex Serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #dbe5e6;
+}
+
+h2{
+  //styleName: UI/Third_Text;
+font-family: IBM Plex Mono;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: 16px;
+letter-spacing: 0em;
+text-align: left;
+
+
+}
+
+p {
+  font-family: IBM Plex Mono;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+a{
+ color: #EDF67D
+}
+
+.dropfield {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 16px;
+}
+
+.spacing{
+   padding: 0px 16px;
+}
+
+.dropcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px;
+  position: static;
+  width: 472px;
+  left: 8px;
+  top: 0%;
+  bottom: 0%;
+
+  /* UI/Third_Text */
+
+  border: 1px dashed #404e51;
+  box-sizing: border-box;
+
+  /* Inside Auto Layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 10px 0px;
+}
+
+.loadingcontainer {
+  /* Auto Layout */
+
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 16px;
+
+position: static;
+ width: 472px;
+  left: 8px;
+top: 66.29%;
+bottom: 0%;
+
+
+/* UI/Fine_Contur */
+
+background: #33373A;
+/* UI/Third_Text */
+
+border: 1px solid #404E51;
+box-sizing: border-box;
+
+/* Inside Auto Layout */
+
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+margin: 10px 0px;
+}
+
+
+.progress-description{
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+
+}
+
+
+
+
+
 
 .loading-bar {
   position: relative;
-  width: 200px;
-  height: 10px;
-  border-radius: 15px;
+  width: 420px;
+  height: 4px;
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba($color: #000, $alpha: 0.4), 0 -1px 1px #fff,
-    0 1px 0 #fff;
+  background-color: #DBE5E6;
   .percentage {
     position: absolute;
-    top: 1px;
-    right: 1px;
-    left: 1px;
+    top: 0px;
+    right: 0px;
+    left: 0px;
     display: block;
     height: 100%;
     width: 50%;
-    background-color: #a5df41;
+    background-color: #EDF67D;
     background-image: linear-gradient(
       135deg,
       rgba($color: #fff, $alpha: 0.15) 25%,
       transparent 25%,
       transparent 50%,
-      rgba($color: #fff, $alpha: 0.15) 50%,
-      rgba($color: #fff, $alpha: 0.15) 75%,
+      rgba($color: #33373A, $alpha: 0.55) 5%,
+      rgba($color: #33373A, $alpha: 0.55) 75%,
       transparent 75%,
       transparent
     );
@@ -71,7 +223,7 @@
     background-position: 0 0;
   }
   100% {
-    background-position: 60px 0;
+    background-position: 420px 0;
   }
 }
 </style>
@@ -89,10 +241,12 @@ import "./figma-ui/js/selectMenu";
 import "./figma-ui/js/iconInput";
 import "./figma-ui/js/disclosure";
 import Spinner from "./LoadingSpinner.vue";
+import FileIcon from "./file-icon.vue";
 
 export default {
   components: {
     Spinner,
+    FileIcon,
   },
   data() {
     return {
@@ -104,9 +258,9 @@ export default {
   },
   mounted() {
     // Add these lines to initialize the interactive figma-ui components as needed.
-    window.selectMenu.init();
-    window.iconInput.init();
-    window.disclosure.init();
+    // window.selectMenu.init();
+    // window.iconInput.init();
+    // window.disclosure.init();
 
     // The following shows how messages from the main code can be handled in the UI code.
     handleEvent("nodeCreated", (nodeID) => {
@@ -127,13 +281,15 @@ export default {
     },
 
     onFilePicked(event) {
+      console.log(event);
       var reader = new FileReader();
       reader.onload = this.onReaderLoad;
-      reader.readAsText(event.target.files.FIle[0]);
+      reader.readAsText(event.target.files[0]);
     },
     onReaderLoad(event) {
       var obj = JSON.parse(event.target.result);
       console.log(obj);
+      dispatch("resize");
       this.createNode(obj);
     },
 
